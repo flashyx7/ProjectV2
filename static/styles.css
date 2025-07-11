@@ -318,17 +318,7 @@ h1 {
     animation: scaleIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-h1::after {
-    content: '';
-    position: absolute;
-    bottom: -12px;
-    left: 0;
-    width: 80px;
-    height: 4px;
-    background: var(--gradient-secondary);
-    border-radius: var(--radius-full);
-    animation: slideInLeft 0.8s ease-out 0.3s both;
-}
+
 
 h2 {
     font-family: var(--font-secondary);
@@ -340,16 +330,7 @@ h2 {
     animation: slideInUp 0.6s ease-out 0.2s both;
 }
 
-h2::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 60px;
-    height: 3px;
-    background: var(--gradient-primary);
-    border-radius: var(--radius-full);
-}
+
 
 h3 {
     font-family: var(--font-secondary);
@@ -728,15 +709,7 @@ p {
     animation: slideInUp 0.8s ease-out;
 }
 
-.section-header::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 120px;
-    height: 2px;
-    background: var(--gradient-primary);
-}
+
 
 .section-header h1 {
     margin: 0;
@@ -1161,16 +1134,7 @@ p {
     font-family: var(--font-secondary);
 }
 
-.details-section h3::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 40px;
-    height: 3px;
-    background: var(--gradient-primary);
-    border-radius: var(--radius-full);
-}
+
 
 .skills-list, .company-tags, .designation-tags, .degree-tags, .college-tags {
     display: flex;
