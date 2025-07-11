@@ -5,8 +5,126 @@ let authToken = null;
 // Define API base URL
 const API_BASE = window.location.origin;
 
+// Animation utilities
+function initScrollAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    // Observe all elements that should animate on scroll
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+function addStaggerAnimation(container, delay = 100) {
+    const elements = container.children;
+    Array.from(elements).forEach((el, index) => {
+        el.style.animationDelay = `${index * delay}ms`;
+        el.classList.add('animate-on-scroll');
+    });
+}
+
+function addMicroInteractions() {
+    // Add hover effects to interactive elements
+    document.querySelectorAll('.btn, .card, .stat-card, .nav-link').forEach(el => {
+        el.addEventListener('mouseenter', function() {
+            this.style.transform = this.style.transform || '';
+        });
+    });
+
+    // Add ripple effect to buttons
+    document.querySelectorAll('.btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}px;
+                top: ${y}px;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                pointer-events: none;
+            `;
+            
+            this.style.position = 'relative';
+            this.style.overflow = 'hidden';
+            this.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+}
+
+// Add CSS for ripple animation
+function addRippleStyles() {
+    if (!document.getElementById('ripple-styles')) {
+        const style = document.createElement('style');
+        style.id = 'ripple-styles';
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// Smooth parallax scrolling
+function initParallaxEffects() {
+    let ticking = false;
+    
+    function updateParallax() {
+        const scrolled = window.pageYOffset;
+        const parallaxElements = document.querySelectorAll('.parallax-element');
+        
+        parallaxElements.forEach(element => {
+            const speed = element.dataset.speed || 0.5;
+            const yPos = -(scrolled * speed);
+            element.style.transform = `translateY(${yPos}px)`;
+        });
+        
+        ticking = false;
+    }
+    
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+    }
+    
+    window.addEventListener('scroll', requestTick);
+}
+
 // Add proper initial setup
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize animations and interactions
+    addRippleStyles();
+    addMicroInteractions();
+    initScrollAnimations();
+    initParallaxEffects();
+    
     // Check if user is already logged in
     const token = localStorage.getItem('authToken');
     const user = localStorage.getItem('currentUser');
@@ -287,14 +405,52 @@ function showLoggedOutState() {
 }
 
 function showSection(sectionName) {
-    document.querySelectorAll('.section').forEach(section => {
-        section.classList.remove('active');
-    });
+    // Fade out current section
+    const currentSection = document.querySelector('.section.active');
+    if (currentSection) {
+        currentSection.style.opacity = '0';
+        currentSection.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show new section with animation
+            const newSection = document.getElementById(`${sectionName}-section`);
+            newSection.classList.add('active');
+            
+            // Reset and animate
+            setTimeout(() => {
+                newSection.style.opacity = '1';
+                newSection.style.transform = 'translateY(0)';
+                
+                // Add stagger animation to cards if they exist
+                const cardsGrid = newSection.querySelector('.cards-grid');
+                if (cardsGrid) {
+                    addStaggerAnimation(cardsGrid, 100);
+                }
+                
+                const statsGrid = newSection.querySelector('.dashboard-stats');
+                if (statsGrid) {
+                    addStaggerAnimation(statsGrid, 150);
+                }
+                
+                // Re-initialize scroll animations for new content
+                setTimeout(() => {
+                    initScrollAnimations();
+                }, 100);
+            }, 50);
+        }, 300);
+    } else {
+        // First load
+        document.getElementById(`${sectionName}-section`).classList.add('active');
+    }
+    
     document.querySelectorAll('.nav-link').forEach(link => {
         link.classList.remove('active');
     });
 
-    document.getElementById(`${sectionName}-section`).classList.add('active');
     const navLink = document.getElementById(`${sectionName}-link`);
     if (navLink) {
         navLink.classList.add('active');
@@ -537,13 +693,14 @@ async function displayJobs(jobs) {
 
     jobsList.innerHTML = '';
 
-    for (const job of jobs) {
+    for (const [index, job] of jobs.entries()) {
         let hasApplied = false;
         if (currentUser && currentUser.role === 'applicant') {
             hasApplied = await checkApplicationStatus(job.id);
         }
         const jobCard = document.createElement('div');
-        jobCard.className = 'card';
+        jobCard.className = 'card animate-on-scroll interactive-hover';
+        jobCard.style.animationDelay = `${index * 100}ms`;
         jobCard.innerHTML = `
             <h3>${job.title}</h3>
             <p><strong>Description:</strong> ${job.description}</p>
@@ -567,6 +724,9 @@ async function displayJobs(jobs) {
         `;
         jobsList.appendChild(jobCard);
     }
+    
+    // Initialize scroll animations for new cards
+    setTimeout(() => initScrollAnimations(), 100);
 }
 
 async function deleteJob(jobId) {
@@ -1635,13 +1795,43 @@ function showToast(message, type = 'success') {
     const toastContainer = document.getElementById('toast-container');
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
-    toast.textContent = message;
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(100%)';
+    toast.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+            <span>${message}</span>
+        </div>
+    `;
 
     toastContainer.appendChild(toast);
 
+    // Animate in
     setTimeout(() => {
-        toast.remove();
-    }, 5000);
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(0)';
+    }, 10);
+
+    // Animate out and remove
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+    }, 4700);
+}
+
+function showLoadingShimmer(container) {
+    const shimmerHTML = `
+        <div class="loading-shimmer" style="height: 200px; border-radius: var(--radius-xl); margin-bottom: 2rem;"></div>
+        <div class="loading-shimmer" style="height: 200px; border-radius: var(--radius-xl); margin-bottom: 2rem;"></div>
+        <div class="loading-shimmer" style="height: 200px; border-radius: var(--radius-xl); margin-bottom: 2rem;"></div>
+    `;
+    container.innerHTML = shimmerHTML;
+}
+
+function hideLoadingShimmer(container) {
+    const shimmers = container.querySelectorAll('.loading-shimmer');
+    shimmers.forEach(shimmer => shimmer.remove());
 }
 
 // Close modals when clicking outside

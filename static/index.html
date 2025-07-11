@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,13 +7,17 @@
     <title>Recruitment Tracker System</title>
     <link rel="stylesheet" href="/styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <meta name="description" content="Modern recruitment tracking system">
-    <meta name="theme-color" content="#6366f1">
+    <meta name="description" content="Modern recruitment tracking system with AI-powered matching">
+    <meta name="theme-color" content="#C77DFF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
     <div id="app">
         <!-- Navigation -->
-        <nav class="navbar">
+        <nav class="navbar parallax-element" data-speed="0.2">
             <div class="nav-brand">
                 <i class="fas fa-briefcase"></i>
                 <span>Recruitment Tracker</span>
@@ -42,7 +47,7 @@
 
                     <!-- Login Form -->
                     <div id="login-form" class="auth-form active">
-                        <h2>Login</h2>
+                        <h2>Welcome Back</h2>
                         <form onsubmit="login(event)">
                             <div class="form-group">
                                 <input type="text" id="login-username" placeholder="Username" required>
@@ -50,13 +55,16 @@
                             <div class="form-group">
                                 <input type="password" id="login-password" placeholder="Password" required>
                             </div>
-                            <button type="submit" class="btn btn-primary">Login</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt"></i>
+                                Login
+                            </button>
                         </form>
                     </div>
 
                     <!-- Register Form -->
                     <div id="register-form" class="auth-form">
-                        <h2>Register</h2>
+                        <h2>Create Account</h2>
                         <form onsubmit="register(event)">
                             <div class="form-group">
                                 <select id="register-role" required onchange="toggleEmployeeIdField()">
@@ -77,7 +85,10 @@
                             <div class="form-group">
                                 <input type="password" id="register-password" placeholder="Password" required>
                             </div>
-                            <button type="submit" class="btn btn-primary">Register</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i>
+                                Register
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -86,33 +97,35 @@
             <!-- Dashboard Section -->
             <section id="dashboard-section" class="section">
                 <div class="dashboard">
-                    <div class="section-header">
-                        <h1>Dashboard Overview</h1>
-                        <p style="margin: 0; color: var(--text-secondary);">Track your recruitment metrics and activities</p>
+                    <div class="section-header animate-on-scroll">
+                        <div>
+                            <h1>Dashboard Overview</h1>
+                            <p style="margin: 0; color: var(--text-secondary);">Track your recruitment metrics and activities</p>
+                        </div>
                     </div>
                     <div class="dashboard-stats">
-                        <div class="stat-card">
+                        <div class="stat-card animate-on-scroll stagger-delay-1">
                             <i class="fas fa-briefcase"></i>
                             <div>
                                 <h3 id="jobs-count">0</h3>
                                 <p>Active Positions</p>
                             </div>
                         </div>
-                        <div class="stat-card" id="applicants-stat-card">
+                        <div class="stat-card animate-on-scroll stagger-delay-2" id="applicants-stat-card">
                             <i class="fas fa-users"></i>
                             <div>
                                 <h3 id="applicants-count">0</h3>
                                 <p>Total Applicants</p>
                             </div>
                         </div>
-                        <div class="stat-card">
+                        <div class="stat-card animate-on-scroll stagger-delay-3">
                             <i class="fas fa-calendar-alt"></i>
                             <div>
                                 <h3 id="interviews-count">0</h3>
                                 <p>Scheduled Interviews</p>
                             </div>
                         </div>
-                        <div class="stat-card">
+                        <div class="stat-card animate-on-scroll stagger-delay-4">
                             <i class="fas fa-file-signature"></i>
                             <div>
                                 <h3 id="offers-count">0</h3>
@@ -120,7 +133,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="recent-activities">
+                    <div class="recent-activities animate-on-scroll">
                         <h3>Recent Activities</h3>
                         <div id="activities-list" class="activities-list">
                             <div class="activity-item">
@@ -134,7 +147,7 @@
 
             <!-- Jobs Section -->
             <section id="jobs-section" class="section">
-                <div class="section-header">
+                <div class="section-header animate-on-scroll">
                     <div>
                         <h1>Job Positions</h1>
                         <p style="margin: 0; color: var(--text-secondary);">Manage and track all open positions</p>
@@ -180,7 +193,7 @@
 
             <!-- Applicants Section -->
             <section id="applicants-section" class="section">
-                <div class="section-header">
+                <div class="section-header animate-on-scroll">
                     <div>
                         <h1 id="applicants-section-title">Candidate Profiles</h1>
                         <p style="margin: 0; color: var(--text-secondary);">View and manage applicant information</p>
@@ -220,7 +233,7 @@
 
             <!-- Interviews Section -->
             <section id="interviews-section" class="section">
-                <div class="section-header">
+                <div class="section-header animate-on-scroll">
                     <div>
                         <h1>Interview Schedule</h1>
                         <p style="margin: 0; color: var(--text-secondary);">Manage interview appointments and status</p>
@@ -263,7 +276,7 @@
 
             <!-- Applications Section -->
             <section id="applications-section" class="section">
-                <div class="section-header">
+                <div class="section-header animate-on-scroll">
                     <div>
                         <h1 id="applications-section-title">Job Applications</h1>
                         <p style="margin: 0; color: var(--text-secondary);" id="applications-section-desc">View and manage job applications</p>
@@ -277,7 +290,7 @@
 
             <!-- Offers Section -->
             <section id="offers-section" class="section">
-                <div class="section-header">
+                <div class="section-header animate-on-scroll">
                     <div>
                         <h1>Offer Management</h1>
                         <p style="margin: 0; color: var(--text-secondary);">Generate and track job offers</p>
@@ -323,21 +336,21 @@
 
             <!-- Matching Section -->
             <section id="matching-section" class="section">
-                <div class="section-header">
+                <div class="section-header animate-on-scroll">
                     <div>
                         <h1>Smart Matching</h1>
                         <p style="margin: 0; color: var(--text-secondary);">AI-powered job-candidate matching system</p>
                     </div>
                 </div>
 
-                <div class="matching-tabs" id="matching-tabs-container">
+                <div class="matching-tabs animate-on-scroll" id="matching-tabs-container">
                     <button class="tab-btn active" onclick="showMatchingTab('job-to-candidate')" id="job-to-candidate-tab-btn">Jobs to Candidates</button>
                     <button class="tab-btn" onclick="showMatchingTab('candidate-to-job')" id="candidate-to-job-tab-btn">Candidates to Jobs</button>
                 </div>
 
                 <!-- Job to Candidate Matching -->
                 <div id="job-to-candidate-tab" class="matching-tab active">
-                    <div class="matching-controls">
+                    <div class="matching-controls animate-on-scroll">
                         <div class="form-group">
                             <label for="match-threshold">Minimum Match Percentage: <span id="threshold-value">50%</span></label>
                             <input type="range" id="match-threshold" min="0" max="100" value="50" 
@@ -355,7 +368,7 @@
 
                 <!-- Candidate to Job Matching -->
                 <div id="candidate-to-job-tab" class="matching-tab">
-                    <div class="matching-controls">
+                    <div class="matching-controls animate-on-scroll">
                         <div class="form-group">
                             <label for="candidate-select">Select Candidate:</label>
                             <select id="candidate-select">
