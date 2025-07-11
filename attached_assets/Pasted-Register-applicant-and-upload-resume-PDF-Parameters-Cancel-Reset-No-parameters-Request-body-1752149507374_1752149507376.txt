@@ -1,0 +1,117 @@
+Register applicant and upload resume PDF
+
+Parameters
+Cancel
+Reset
+No parameters
+
+Request body
+
+multipart/form-data
+name *
+string
+Atharva
+email *
+string
+Atharva@gmail.com
+resume *
+string($binary)
+AtharvaWankar_Resume2.0.pdf
+Execute
+Clear
+Responses
+Curl
+
+curl -X 'POST' \
+  'https://57ea9722-ede7-4d9f-a3bb-e7cbefb199ff-00-3owrok7rjxet6.sisko.replit.dev/applicants/' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhdGhhcnZhIiwiZXhwIjoxNzUyMTUxMjMzfQ.ihsnin9lireNb14kfsp-9f64bf2yQs8fDY8fvECNN6Q' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'name=Atharva' \
+  -F 'email=Atharva@gmail.com' \
+  -F 'resume=@AtharvaWankar_Resume2.0.pdf;type=application/pdf'
+Request URL
+https://57ea9722-ede7-4d9f-a3bb-e7cbefb199ff-00-3owrok7rjxet6.sisko.replit.dev/applicants/
+Server response
+Code	Details
+401
+Undocumented
+Error: Unauthorized
+
+Response body
+Download
+{
+  "detail": "Invalid authentication credentials"
+}
+Response headers
+ access-control-allow-credentials: true 
+ access-control-allow-origin: * 
+ content-length: 47 
+ content-type: application/json 
+ date: Thu,10 Jul 2025 12:11:03 GMT 
+ replit-cluster: sisko 
+ server: uvicorn 
+ x-robots-tag: none,noindex,noarchive,nofollow,nositelinkssearchbox,noimageindex,none,noindex,noarchive,nofollow,nositelinkssearchbox,noimageindex 
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "id": 0,
+  "user_id": 0,
+  "name": "string",
+  "email": "string",
+  "resume_text": "string",
+  "skills": [
+    "string"
+  ],
+  "phone": "string",
+  "education": [
+    "string"
+  ],
+  "experience": [
+    "string"
+  ],
+  "company_names": [
+    "string"
+  ],
+  "designations": [
+    "string"
+  ],
+  "degrees": [
+    "string"
+  ],
+  "college_names": [
+    "string"
+  ],
+  "total_experience": 0,
+  "created_at": "2025-07-10T12:11:04.860Z"
+}
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}

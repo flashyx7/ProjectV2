@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruitment Tracker System</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Modern recruitment tracking system">
+    <meta name="theme-color" content="#6366f1">
+</head>
+<body>
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-briefcase"></i>
+                <span>Recruitment Tracker</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#" onclick="showSection('auth')" class="nav-link active" id="auth-link">Login</a>
+                <a href="#" onclick="showSection('dashboard')" class="nav-link" id="dashboard-link" style="display:none;">Dashboard</a>
+                <a href="#" onclick="showSection('jobs')" class="nav-link" id="jobs-link" style="display:none;">Jobs</a>
+                <a href="#" onclick="showSection('applicants')" class="nav-link" id="applicants-link" style="display:none;">Applicants</a>
+                <a href="#" onclick="showSection('interviews')" class="nav-link" id="interviews-link" style="display:none;">Interviews</a>
+                <a href="#" onclick="showSection('offers')" class="nav-link" id="offers-link" style="display:none;">Offers</a>
+                <a href="#" onclick="showSection('applications')" class="nav-link" id="applications-link" style="display:none;">Applications</a>
+                <a href="#" onclick="showSection('matching')" class="nav-link" id="matching-link" style="display:none;">Matching</a>
+                <a href="#" onclick="logout()" class="nav-link" id="logout-link" style="display:none;">Logout</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Authentication Section -->
+            <section id="auth-section" class="section active">
+                <div class="auth-container">
+                    <div class="auth-tabs">
+                        <button class="tab-btn active" onclick="showAuthTab('login')">Login</button>
+                        <button class="tab-btn" onclick="showAuthTab('register')">Register</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <div id="login-form" class="auth-form active">
+                        <h2>Login</h2>
+                        <form onsubmit="login(event)">
+                            <div class="form-group">
+                                <input type="text" id="login-username" placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="login-password" placeholder="Password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </form>
+                    </div>
+
+                    <!-- Register Form -->
+                    <div id="register-form" class="auth-form">
+                        <h2>Register</h2>
+                        <form onsubmit="register(event)">
+                            <div class="form-group">
+                                <select id="register-role" required onchange="toggleEmployeeIdField()">
+                                    <option value="">Select Role</option>
+                                    <option value="company">Company/HR</option>
+                                    <option value="applicant">Applicant</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="employee-id-group" style="display: none;">
+                                <input type="text" id="register-employee-id" placeholder="Employee ID">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="register-username" placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" id="register-email" placeholder="Email" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="register-password" placeholder="Password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="section">
+                <div class="dashboard">
+                    <div class="section-header">
+                        <h1>Dashboard Overview</h1>
+                        <p style="margin: 0; color: var(--text-secondary);">Track your recruitment metrics and activities</p>
+                    </div>
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <i class="fas fa-briefcase"></i>
+                            <div>
+                                <h3 id="jobs-count">0</h3>
+                                <p>Active Positions</p>
+                            </div>
+                        </div>
+                        <div class="stat-card" id="applicants-stat-card">
+                            <i class="fas fa-users"></i>
+                            <div>
+                                <h3 id="applicants-count">0</h3>
+                                <p>Total Applicants</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-calendar-alt"></i>
+                            <div>
+                                <h3 id="interviews-count">0</h3>
+                                <p>Scheduled Interviews</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-file-signature"></i>
+                            <div>
+                                <h3 id="offers-count">0</h3>
+                                <p>Generated Offers</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-activities">
+                        <h3>Recent Activities</h3>
+                        <div id="activities-list" class="activities-list">
+                            <div class="activity-item">
+                                <p>Welcome to your recruitment dashboard! Start by creating job positions or adding applicants.</p>
+                                <span class="activity-time">Getting started</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Jobs Section -->
+            <section id="jobs-section" class="section">
+                <div class="section-header">
+                    <div>
+                        <h1>Job Positions</h1>
+                        <p style="margin: 0; color: var(--text-secondary);">Manage and track all open positions</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showJobForm()" id="create-job-btn" style="display:none;">
+                        <i class="fas fa-plus"></i> Create Position
+                    </button>
+                </div>
+
+                <div id="job-form" class="modal" style="display:none;">
+                    <div class="modal-content">
+                        <span class="close" onclick="hideJobForm()">&times;</span>
+                        <h2 id="job-form-title">Create Job Position</h2>
+                        <form onsubmit="saveJob(event)">
+                            <input type="hidden" id="job-id">
+                            <div class="form-group">
+                                <input type="text" id="job-title" placeholder="Job Title" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea id="job-description" placeholder="Job Description" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="job-skills" placeholder="Required Skills (comma separated)" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="number" id="job-salary" placeholder="Salary" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="job-location" placeholder="Location">
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="hideJobForm()">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="jobs-list" class="cards-grid">
+                    <!-- Jobs will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Applicants Section -->
+            <section id="applicants-section" class="section">
+                <div class="section-header">
+                    <div>
+                        <h1 id="applicants-section-title">Candidate Profiles</h1>
+                        <p style="margin: 0; color: var(--text-secondary);">View and manage applicant information</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showApplicantForm()" id="create-applicant-btn" style="display:none;">
+                        <i class="fas fa-user-plus"></i> <span id="add-applicant-btn-text">Add Candidate</span>
+                    </button>
+                </div>
+
+                <div id="applicant-form" class="modal" style="display:none;">
+                    <div class="modal-content">
+                        <span class="close" onclick="hideApplicantForm()">&times;</span>
+                        <h2>Create Applicant Profile</h2>
+                        <form onsubmit="saveApplicant(event)" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <input type="text" id="applicant-name" placeholder="Full Name" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" id="applicant-email" placeholder="Email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="applicant-resume">Upload Resume (PDF only)</label>
+                                <input type="file" id="applicant-resume" accept=".pdf" required>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="hideApplicantForm()">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="applicants-list" class="cards-grid">
+                    <!-- Applicants will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Interviews Section -->
+            <section id="interviews-section" class="section">
+                <div class="section-header">
+                    <div>
+                        <h1>Interview Schedule</h1>
+                        <p style="margin: 0; color: var(--text-secondary);">Manage interview appointments and status</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showInterviewForm()" id="create-interview-btn" style="display:none;">
+                        <i class="fas fa-calendar-plus"></i> Schedule Interview
+                    </button>
+                </div>
+
+                <div id="interview-form" class="modal" style="display:none;">
+                    <div class="modal-content">
+                        <span class="close" onclick="hideInterviewForm()">&times;</span>
+                        <h2>Schedule Interview</h2>
+                        <form onsubmit="saveInterview(event)">
+                            <div class="form-group">
+                                <select id="interview-applicant" required>
+                                    <option value="">Select Applicant</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select id="interview-position" required>
+                                    <option value="">Select Position</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="datetime-local" id="interview-datetime" required>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="hideInterviewForm()">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Schedule</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="interviews-list" class="cards-grid">
+                    <!-- Interviews will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Applications Section -->
+            <section id="applications-section" class="section">
+                <div class="section-header">
+                    <div>
+                        <h1 id="applications-section-title">Job Applications</h1>
+                        <p style="margin: 0; color: var(--text-secondary);" id="applications-section-desc">View and manage job applications</p>
+                    </div>
+                </div>
+
+                <div id="applications-list" class="cards-grid">
+                    <!-- Applications will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Offers Section -->
+            <section id="offers-section" class="section">
+                <div class="section-header">
+                    <div>
+                        <h1>Offer Management</h1>
+                        <p style="margin: 0; color: var(--text-secondary);">Generate and track job offers</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showOfferForm()" id="create-offer-btn" style="display:none;">
+                        <i class="fas fa-file-contract"></i> Generate Offer
+                    </button>
+                </div>
+
+                <div id="offer-form" class="modal" style="display:none;">
+                    <div class="modal-content">
+                        <span class="close" onclick="hideOfferForm()">&times;</span>
+                        <h2>Generate Offer Letter</h2>
+                        <form onsubmit="saveOffer(event)">
+                            <div class="form-group">
+                                <select id="offer-applicant" required>
+                                    <option value="">Select Applicant</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select id="offer-position" required>
+                                    <option value="">Select Position</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="number" id="offer-salary" placeholder="Salary" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="date" id="offer-start-date" required>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="hideOfferForm()">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Generate</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="offers-list" class="cards-grid">
+                    <!-- Offers will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Matching Section -->
+            <section id="matching-section" class="section">
+                <div class="section-header">
+                    <div>
+                        <h1>Smart Matching</h1>
+                        <p style="margin: 0; color: var(--text-secondary);">AI-powered job-candidate matching system</p>
+                    </div>
+                </div>
+
+                <div class="matching-tabs" id="matching-tabs-container">
+                    <button class="tab-btn active" onclick="showMatchingTab('job-to-candidate')" id="job-to-candidate-tab-btn">Jobs to Candidates</button>
+                    <button class="tab-btn" onclick="showMatchingTab('candidate-to-job')" id="candidate-to-job-tab-btn">Candidates to Jobs</button>
+                </div>
+
+                <!-- Job to Candidate Matching -->
+                <div id="job-to-candidate-tab" class="matching-tab active">
+                    <div class="matching-controls">
+                        <div class="form-group">
+                            <label for="match-threshold">Minimum Match Percentage: <span id="threshold-value">50%</span></label>
+                            <input type="range" id="match-threshold" min="0" max="100" value="50" 
+                                   oninput="updateMatchThreshold(this.value)">
+                        </div>
+                        <button class="btn btn-primary" onclick="findMatches()">
+                            <i class="fas fa-search"></i> Find Matches
+                        </button>
+                    </div>
+
+                    <div id="matches-list" class="matches-container">
+                        <!-- Job-to-candidate matches will be displayed here -->
+                    </div>
+                </div>
+
+                <!-- Candidate to Job Matching -->
+                <div id="candidate-to-job-tab" class="matching-tab">
+                    <div class="matching-controls">
+                        <div class="form-group">
+                            <label for="candidate-select">Select Candidate:</label>
+                            <select id="candidate-select">
+                                <option value="">Choose a candidate...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="candidate-match-threshold">Minimum Match Percentage: <span id="candidate-threshold-value">50%</span></label>
+                            <input type="range" id="candidate-match-threshold" min="0" max="100" value="50" 
+                                   oninput="updateCandidateMatchThreshold(this.value)">
+                        </div>
+                        <button class="btn btn-primary" onclick="findJobsForCandidate()">
+                            <i class="fas fa-search"></i> Find Matching Jobs
+                        </button>
+                    </div>
+
+                    <div id="candidate-matches-list" class="matches-container">
+                        <!-- Candidate-to-job matches will be displayed here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Toast Notifications -->
+        <div id="toast-container" class="toast-container"></div>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>

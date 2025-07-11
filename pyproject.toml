@@ -1,0 +1,17 @@
+[project]
+name = "python-template"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+requires-python = ">=3.11"
+dependencies = [
+    "bcrypt>=4.3.0",
+    "fastapi>=0.116.0",
+    "pydantic>=2.11.7",
+    "pypdf2>=3.0.1",
+    "python-jose[cryptography]>=3.5.0",
+    "python-multipart>=0.0.20",
+    "reportlab>=4.4.2",
+    "sqlalchemy>=2.0.41",
+    "uvicorn>=0.35.0",
+]

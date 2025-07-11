@@ -1,0 +1,235 @@
+List offers - companies see all, applicants see their own
+
+Parameters
+Cancel
+No parameters
+
+Execute
+Clear
+Responses
+Curl
+
+curl -X 'GET' \
+  'https://57ea9722-ede7-4d9f-a3bb-e7cbefb199ff-00-3owrok7rjxet6.sisko.replit.dev/offers/' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc1MjE1Mjk5NX0.R9EjmIsgsFtBbxOttMV7hQG8jcagfxq-D8nNQvNgu1o'
+Request URL
+https://57ea9722-ede7-4d9f-a3bb-e7cbefb199ff-00-3owrok7rjxet6.sisko.replit.dev/offers/
+Server response
+Code	Details
+401
+Undocumented
+Error: Unauthorized
+
+Response body
+Download
+{
+  "detail": "Invalid authentication credentials"
+}
+Response headers
+ content-length: 47 
+ content-type: application/json 
+ date: Thu,10 Jul 2025 12:40:11 GMT 
+ replit-cluster: sisko 
+ server: uvicorn 
+ x-robots-tag: none,noindex,noarchive,nofollow,nositelinkssearchbox,noimageindex,none,noindex,noarchive,nofollow,nositelinkssearchbox,noimageindex 
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+[
+  {
+    "id": 0,
+    "applicant_id": 0,
+    "position_id": 0,
+    "pdf_path": "string",
+    "created_at": "2025-07-10T12:40:53.603Z"
+  }
+]
+No links
+
+POST
+/offers/
+Generate Offer Letter
+
+
+Generate and create offer letter PDF
+
+Parameters
+Cancel
+Reset
+No parameters
+
+Request body
+
+application/json
+Edit Value
+Schema
+{
+  "applicant_id": 2,
+  "position_id": 2,
+  "salary": 190299,
+  "start_date": "20/07/2025"
+}
+Execute
+Clear
+Responses
+Curl
+
+curl -X 'POST' \
+  'https://57ea9722-ede7-4d9f-a3bb-e7cbefb199ff-00-3owrok7rjxet6.sisko.replit.dev/offers/' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc1MjE1Mjk5NX0.R9EjmIsgsFtBbxOttMV7hQG8jcagfxq-D8nNQvNgu1o' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "applicant_id": 2,
+  "position_id": 2,
+  "salary": 190299,
+  "start_date": "20/07/2025"
+}'
+Request URL
+https://57ea9722-ede7-4d9f-a3bb-e7cbefb199ff-00-3owrok7rjxet6.sisko.replit.dev/offers/
+Server response
+Code	Details
+401
+Undocumented
+Error: Unauthorized
+
+Response body
+Download
+{
+  "detail": "Invalid authentication credentials"
+}
+Response headers
+ access-control-allow-credentials: true 
+ access-control-allow-origin: * 
+ content-length: 47 
+ content-type: application/json 
+ date: Thu,10 Jul 2025 12:40:42 GMT 
+ replit-cluster: sisko 
+ server: uvicorn 
+ x-robots-tag: none,noindex,noarchive,nofollow,nositelinkssearchbox,noimageindex,none,noindex,noarchive,nofollow,nositelinkssearchbox,noimageindex 
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "id": 0,
+  "applicant_id": 0,
+  "position_id": 0,
+  "pdf_path": "string",
+  "created_at": "2025-07-10T12:40:53.607Z"
+}
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/offers/{offer_id}
+Download Offer Letter
+
+
+Download offer letter PDF
+
+Parameters
+Cancel
+Name	Description
+offer_id *
+integer
+(path)
+1
+Execute
+Clear
+Responses
+Curl
+
+curl -X 'GET' \
+  'https://57ea9722-ede7-4d9f-a3bb-e7cbefb199ff-00-3owrok7rjxet6.sisko.replit.dev/offers/1' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc1MjE1Mjk5NX0.R9EjmIsgsFtBbxOttMV7hQG8jcagfxq-D8nNQvNgu1o'
+Request URL
+https://57ea9722-ede7-4d9f-a3bb-e7cbefb199ff-00-3owrok7rjxet6.sisko.replit.dev/offers/1
+Server response
+Code	Details
+401
+Undocumented
+Error: Unauthorized
+
+Response body
+Download
+{
+  "detail": "Invalid authentication credentials"
+}
+Response headers
+ content-length: 47 
+ content-type: application/json 
+ date: Thu,10 Jul 2025 12:40:52 GMT 
+ replit-cluster: sisko 
+ server: uvicorn 
+ x-robots-tag: none,noindex,noarchive,nofollow,nositelinkssearchbox,noimageindex,none,noindex,noarchive,nofollow,nositelinkssearchbox,noimageindex 
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}

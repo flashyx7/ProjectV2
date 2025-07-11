@@ -1,0 +1,217 @@
+Recruitment Tracker System - Complete FastAPI Application
+Project Overview
+Build a complete hiring management system with FastAPI featuring two user roles: Company/HR and Employee/Applicant. The system should handle job postings, resume uploads, skill matching, interview scheduling, and offer letter generation.
+
+Technical Requirements
+Core Technologies
+FastAPI - Main web framework
+SQLAlchemy - ORM for database operations
+SQLite - Database (for simplicity)
+PyPDF2 - PDF parsing for resumes
+ReportLab - PDF generation for offer letters
+Pydantic - Data validation and serialization
+Uvicorn - ASGI server
+Project Structure
+recruitment_tracker/
+├── main.py                 # Main application entry point
+├── requirements.txt        # Python dependencies
+├── database.py            # Database configuration and session
+├── .env                   # Environment variables
+├── core/
+│   ├── __init__.py
+│   ├── config.py          # Application configuration
+│   └── models.py          # Base SQLAlchemy models
+├── auth/
+│   ├── __init__.py
+│   ├── router.py          # Authentication endpoints
+│   ├── models.py          # User model
+│   ├── schemas.py         # Pydantic schemas
+│   └── crud.py            # Database operations
+├── jobs/
+│   ├── __init__.py
+│   ├── router.py          # Job management endpoints
+│   ├── models.py          # Job model
+│   ├── schemas.py         # Job schemas
+│   └── crud.py            # Job database operations
+├── applicants/
+│   ├── __init__.py
+│   ├── router.py          # Applicant endpoints
+│   ├── models.py          # Applicant model
+│   ├── schemas.py         # Applicant schemas
+│   ├── crud.py            # Applicant database operations
+│   └── parser.py          # Resume PDF parsing logic
+├── matching/
+│   ├── __init__.py
+│   ├── router.py          # Matching endpoints
+│   └── utils.py           # Skill matching algorithms
+├── interviews/
+│   ├── __init__.py
+│   ├── router.py          # Interview scheduling endpoints
+│   ├── models.py          # Interview model
+│   ├── schemas.py         # Interview schemas
+│   └── crud.py            # Interview database operations
+└── offers/
+    ├── __init__.py
+    ├── router.py          # Offer generation endpoints
+    ├── models.py          # Offer model
+    ├── schemas.py         # Offer schemas
+    ├── crud.py            # Offer database operations
+    └── pdf_generator.py   # PDF offer letter generation
+Database Schema
+Required Tables
+User Table
+
+id (Primary Key)
+username (Unique)
+password_hash
+role (enum: "company", "applicant")
+created_at
+JobPosition Table
+
+id (Primary Key)
+title
+description
+skills (JSON field - list of required skills)
+company_id (Foreign Key to User)
+created_at
+Applicant Table
+
+id (Primary Key)
+user_id (Foreign Key to User)
+name
+email
+resume_text (extracted from PDF)
+skills (JSON field - list of skills)
+created_at
+Interview Table
+
+id (Primary Key)
+applicant_id (Foreign Key to Applicant)
+position_id (Foreign Key to JobPosition)
+date_time
+status (enum: "scheduled", "completed", "cancelled")
+created_at
+OfferLetter Table
+
+id (Primary Key)
+applicant_id (Foreign Key to Applicant)
+position_id (Foreign Key to JobPosition)
+pdf_path
+created_at
+API Endpoints
+Authentication Endpoints
+POST /auth/register
+- Register new user (company or applicant)
+POST /auth/login
+- Login user (returns role and basic token)
+Job Management Endpoints
+POST /jobs/
+- Create new job posting (HR only)
+GET /jobs/
+- List all job postings
+GET /jobs/{job_id}
+- Get specific job details
+PUT /jobs/{job_id}
+- Update job posting (HR only)
+DELETE /jobs/{job_id}
+- Delete job posting (HR only)
+Applicant Endpoints
+POST /applicants/
+- Register applicant and upload resume PDF
+GET /applicants/
+- List all applicants (HR only)
+GET /applicants/{applicant_id}
+- Get applicant details
+Matching Endpoints
+GET /jobs/{job_id}/candidates
+- Get matched applicants for a job
+GET /applicants/{applicant_id}/matches
+- Get matching jobs for an applicant
+Interview Endpoints
+POST /interviews/
+- Schedule interview
+GET /interviews/
+- List interviews
+PUT /interviews/{interview_id}
+- Update interview status
+Offer Endpoints
+POST /offers/
+- Generate and create offer letter PDF
+GET /offers/{offer_id}
+- Download offer letter PDF
+Key Features Implementation
+1. Resume Parsing (applicants/parser.py)
+Use PyPDF2 to extract text from uploaded PDF resumes
+Implement basic skill extraction using keyword matching
+Store extracted skills in JSON format
+2. Skill Matching (matching/utils.py)
+Implement simple set intersection algorithm
+Calculate match percentage based on skill overlap
+Return ranked list of matches
+3. PDF Generation (offers/pdf_generator.py)
+Use ReportLab to create professional offer letters
+Include company details, position, applicant name, and basic terms
+Store generated PDFs in local directory
+4. Role-Based Access Control
+Implement simple role checking using FastAPI dependencies
+Company users can: create jobs, view applicants, schedule interviews, generate offers
+Applicant users can: upload resumes, view job matches
+Authentication System
+Simple username/password authentication
+Hash passwords using bcrypt
+Return role information upon login for frontend routing
+Use FastAPI dependency injection for role verification
+File Upload Handling
+Configure FastAPI to handle PDF file uploads
+Validate file type and size
+Store uploaded files temporarily for processing
+Error Handling
+Implement comprehensive error handling for all endpoints
+Return appropriate HTTP status codes
+Provide meaningful error messages
+Testing
+Include sample data seeding
+All endpoints should be testable via FastAPI's automatic Swagger UI at
+/docs
+Provide example requests/responses in docstrings
+Environment Configuration
+Create
+.env
+file with:
+
+DATABASE_URL=sqlite:///./recruitment_tracker.db
+SECRET_KEY=your-secret-key-here
+UPLOAD_DIR=./uploads
+OFFER_LETTERS_DIR=./offer_letters
+Dependencies (requirements.txt)
+fastapi==0.104.1
+uvicorn==0.24.0
+sqlalchemy==2.0.23
+alembic==1.12.1
+pydantic==2.5.0
+python-multipart==0.0.6
+PyPDF2==3.0.1
+reportlab==4.0.7
+bcrypt==4.1.1
+python-jose[cryptography]==3.3.0
+Startup Instructions
+The application should be runnable with:
+uvicorn main:app --reload
+Database tables should be created automatically on startup
+Swagger documentation should be available at
+/docs
+Include sample data creation for testing
+MVP Demo Flow
+Register as Company → Create job posting
+Register as Applicant → Upload resume PDF
+System parses resume and extracts skills
+View matched applicants for job posting
+Schedule interview for selected applicant
+Generate offer letter PDF for applicant
+Additional Requirements
+All code should be well-documented with docstrings
+Include proper error handling and validation
+Use FastAPI's dependency injection for database sessions
+Implement proper HTTP status codes for all responses
+Make the system production-ready with proper logging
+Generate a complete, working application that implements all these features with proper error handling, documentation, and testing capabilities.
